@@ -11,8 +11,7 @@ public:
 
 void thread::run() {
   voo::device_and_queue dq{"iti", native_ptr()};
-  vee::command_buffer cb =
-      vee::allocate_primary_command_buffer(dq.command_pool());
+  auto cb = vee::allocate_primary_command_buffer(dq.command_pool());
 
   while (!interrupted()) {
     voo::swapchain_and_stuff sw{dq};
@@ -26,6 +25,8 @@ void thread::run() {
       sw.queue_submit(dq.queue(), cb);
       sw.queue_present(dq.queue());
     }
+
+    vee::device_wait_idle();
   }
 }
 
