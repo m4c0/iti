@@ -1,4 +1,6 @@
 #pragma leco app
+#pragma leco add_shader "iti.vert"
+#pragma leco add_shader "iti.frag"
 
 import casein;
 import vee;
