@@ -8,22 +8,24 @@ layout(location = 4) in float floor_h;
 
 layout(location = 0) out float instance;
 
-vec2 world() {
-  vec2 d = vec2(0.1) * 0.0;
-  return mix(xz0, xz1 + d, position);
-}
+vec4 model() {
+  vec2 d = vec2(0.0);
+  d = mix(xz0, xz1 + d, position);
+  d -= vec2(2.0, 6.0);
 
-vec2 world2camera(vec2 p) {
-  p -= vec2(2.0, 6.0);
-
-  float t = 0.6;
-  return mat2(cos(t), -sin(t), sin(t), cos(t)) * p;
-}
-
-vec4 camera() {
-  vec2 p = world2camera(world());
   float y = (position.y - 0.5) * 1000.0;
-  return vec4(p.x, y, p.y, 1.0);
+  return vec4(d.x, y, d.y, 1.0);
+}
+
+vec4 view_model() {
+  const float t = -0.6;
+  const mat4 view = mat4(
+    cos(t), 0, sin(t), 0,
+    0, 1, 0, 0,
+    -sin(t), 0, cos(t), 0,
+    0, 0, 0, 1
+  );
+  return view * model();
 }
 
 vec4 frustum() {
@@ -41,16 +43,13 @@ vec4 frustum() {
   const float p5 = 2.0 * n / (ymax - -ymax);
   const float p10 = (-f - n) / fn;
   const float p14 = -2.0 * n * f / fn;
-  const mat4 fr_mat = mat4(
+  const mat4 proj = mat4(
     p0, 0, 0, 0,
     0, p5, 0, 0,
     0, 0, p10, -1,
     0, 0, p14, 0
   );
-
-  vec4 p = camera();
-  p = fr_mat * p;
-  return p;
+  return proj * view_model();
 }
 
 void main() {
@@ -60,7 +59,7 @@ void main() {
   //p /= p.w;
 
   //gl_Position = vec4(p.x, p.z / 10.0, 0, 1);
-  //gl_Position = vec4(camera().xz / 20.0, 0, 1);
+  //gl_Position = vec4(view_model().xz / 20.0, 0, 1);
 
   //p.y = position.y;
   gl_Position = p;
