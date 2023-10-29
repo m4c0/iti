@@ -20,6 +20,7 @@ struct segment {
 class segbuf {
   vee::buffer m_buf;
   vee::device_memory m_mem;
+  unsigned m_size;
 
 public:
   static constexpr const auto max_segs = 1024;
@@ -31,20 +32,63 @@ public:
 
     vee::mapmem mem{*m_mem};
     auto *m = static_cast<segment *>(*mem);
-    m[0] = {};
-    m[0].xz0.x = -0.4;
-    m[0].xz1.x = -0.2;
-
-    m[1] = {};
-    m[1].xz0.x = 0.6;
-    m[1].xz1.x = 0.4;
+    auto *sm = m;
+    *m++ = {
+        .xz0 = {0, 0},
+        .xz1 = {5, 0},
+    };
+    *m++ = {
+        .xz0 = {5, 0},
+        .xz1 = {10, 0},
+    };
+    *m++ = {
+        .xz0 = {0, 0},
+        .xz1 = {0, 10},
+    };
+    *m++ = {
+        .xz0 = {10, 0},
+        .xz1 = {10, 10},
+    };
+    *m++ = {
+        .xz0 = {5, 0},
+        .xz1 = {5, 3.5},
+    };
+    *m++ = {
+        .xz0 = {5, 4},
+        .xz1 = {5, 10},
+    };
+    *m++ = {
+        .xz0 = {5, 3.5},
+        .xz1 = {5.5, 3.5},
+    };
+    *m++ = {
+        .xz0 = {5.5, 3.5},
+        .xz1 = {5.5, 4},
+    };
+    *m++ = {
+        .xz0 = {5.5, 4},
+        .xz1 = {5, 4},
+    };
+    *m++ = {
+        .xz0 = {5, 4},
+        .xz1 = {4.5, 4},
+    };
+    *m++ = {
+        .xz0 = {4.5, 4},
+        .xz1 = {4.5, 3.5},
+    };
+    *m++ = {
+        .xz0 = {4.5, 3.5},
+        .xz1 = {5, 3.5},
+    };
+    m_size = m - sm;
   }
 
   void run(const voo::cmd_render_pass &scb, unsigned idx) const noexcept {
     vee::cmd_bind_vertex_buffers(*scb, idx, *m_buf);
   }
 
-  [[nodiscard]] constexpr auto size() const noexcept { return 2; }
+  [[nodiscard]] constexpr auto size() const noexcept { return m_size; }
 };
 } // namespace
 
