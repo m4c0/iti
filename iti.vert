@@ -13,7 +13,8 @@ vec4 model() {
   d = mix(xz0, xz1 + d, position);
   d -= vec2(2.0, 6.0);
 
-  float y = (position.y - 0.5) * 1000.0;
+  float y = xz0.y == xz1.y ? position.y : position.x;
+  y = (y - 0.5) * 1000.0;
   return vec4(d.x, y, d.y, 1.0);
 }
 
