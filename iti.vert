@@ -38,10 +38,14 @@ void main2() {
 void main() {
   instance = gl_InstanceIndex;
 
-  vec3 p;
-  p.xy = mix(xz0, xz1 + vec2(0.1), position);
-  p.z = 0.0;
+  vec2 p;
+  p = mix(xz0, xz1 + vec2(0.1), position);
+  p -= vec2(2.0, 6.0);
+
+  float t = 0.7;
+  p = mat2(cos(t), -sin(t), sin(t), cos(t)) * p;
+
   p /= 20.0;
 
-  gl_Position = vec4(p, 1);
+  gl_Position = vec4(p, 0, 1);
 }
