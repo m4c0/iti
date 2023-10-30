@@ -12,10 +12,7 @@ vec4 model() {
   vec2 d = vec2(0.0);
   d = mix(xz0, xz1 + d, position);
   d -= vec2(2.0, 6.0);
-
-  float y = xz0.y == xz1.y ? position.y : position.x;
-  y = mix(ceil_h, floor_h, y);
-  return vec4(d.x, y, d.y, 1.0);
+  return vec4(d.x, 0, d.y, 1.0);
 }
 
 vec4 view_model() {
@@ -57,5 +54,7 @@ void main() {
   instance = gl_InstanceIndex;
 
   vec4 p = frustum();
+  p.y = xz0.y == xz1.y ? position.y : position.x;
+  p.y = mix(ceil_h, floor_h, p.y);
   gl_Position = p;
 }
