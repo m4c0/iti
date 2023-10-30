@@ -117,6 +117,10 @@ public:
 
   [[nodiscard]] constexpr auto size() const noexcept { return m_size; }
 };
+
+struct upc {
+  float aspect;
+};
 } // namespace
 
 class thread : public voo::casein_thread {
@@ -134,7 +138,9 @@ void thread::run() {
   while (!interrupted()) {
     voo::swapchain_and_stuff sw{dq};
 
-    auto pl = vee::create_pipeline_layout();
+    auto pl = vee::create_pipeline_layout({
+        vee::vertex_push_constant_range<upc>(),
+    });
     auto gp = vee::create_graphics_pipeline(
         *pl, sw.render_pass(),
         {
@@ -156,11 +162,16 @@ void thread::run() {
     while (!interrupted() && !resized()) {
       sw.acquire_next_image();
 
+      upc pc = {
+          .aspect = sw.aspect(),
+      };
+
       {
         voo::cmd_buf_one_time_submit pcb{cb};
 
         auto scb = sw.cmd_render_pass(cb);
         vee::cmd_bind_gr_pipeline(cb, *gp);
+        vee::cmd_push_vert_frag_constants(cb, *pl, &pc);
         segs.run(scb, 1);
         quad.run(scb, 0, segs.size());
       }

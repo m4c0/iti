@@ -1,5 +1,9 @@
 #version 450
 
+layout(push_constant) uniform upc {
+  float aspect;
+} pc;
+
 layout(location = 0) in vec2 position;
 layout(location = 1) in vec2 xz0;
 layout(location = 2) in vec2 xz1;
@@ -33,10 +37,9 @@ vec4 frustum() {
   const float fn = f - n;
 
   const float fov = 1.0; // tan(45 deg)
-  const float aspect = 16.0 / 9.0;
 
   const float ymax = n * fov;
-  const float xmax = ymax * aspect;
+  const float xmax = ymax * pc.aspect;
 
   const float p0 = 2.0 * n / (xmax - -xmax);
   const float p5 = 2.0 * n / (ymax - -ymax);
