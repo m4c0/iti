@@ -7,6 +7,9 @@ layout(location = 3) in float ceil_h;
 layout(location = 4) in float floor_h;
 
 layout(location = 0) out float instance;
+layout(location = 1) out float out_ceil_h;
+layout(location = 2) out float out_floor_h;
+layout(location = 3) out float out_h;
 
 vec4 model() {
   vec2 d = vec2(0.0);
@@ -55,6 +58,10 @@ void main() {
 
   vec4 p = frustum();
   p.y = xz0.y == xz1.y ? position.y : position.x;
-  p.y = mix(ceil_h, floor_h, p.y);
+  p.y = mix(-1.0, 1.0, p.y) * p.w;
   gl_Position = p;
+
+  out_ceil_h = ceil_h;
+  out_floor_h = floor_h;
+  out_h = p.y;
 }
