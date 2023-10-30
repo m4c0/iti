@@ -57,11 +57,5 @@ void main() {
   instance = gl_InstanceIndex;
 
   vec4 p = frustum();
-  //p /= p.w;
-
-  //gl_Position = vec4(p.x, p.z / 10.0, 0, 1);
-  //gl_Position = vec4(view_model().xz / 20.0, 0, 1);
-
-  //p.y = position.y;
   gl_Position = p;
 }
