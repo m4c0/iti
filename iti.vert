@@ -14,7 +14,7 @@ vec4 model() {
   d -= vec2(2.0, 6.0);
 
   float y = xz0.y == xz1.y ? position.y : position.x;
-  y = (y - 0.5) * 1000.0;
+  y = mix(ceil_h, floor_h, y);
   return vec4(d.x, y, d.y, 1.0);
 }
 
