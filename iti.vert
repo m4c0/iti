@@ -3,13 +3,11 @@
 layout(location = 0) in vec2 position;
 layout(location = 1) in vec2 xz0;
 layout(location = 2) in vec2 xz1;
-layout(location = 3) in float ceil_h;
-layout(location = 4) in float floor_h;
+layout(location = 3) in vec4 ccff;
 
 layout(location = 0) out float instance;
-layout(location = 1) out float out_ceil_h;
-layout(location = 2) out float out_floor_h;
-layout(location = 3) out float out_h;
+layout(location = 1) out float out_h;
+layout(location = 2) out vec4 out_ccff;
 
 vec4 model() {
   vec2 d = vec2(0.0);
@@ -61,7 +59,6 @@ void main() {
   p.y = mix(-1.0, 1.0, p.y) * p.w;
   gl_Position = p;
 
-  out_ceil_h = ceil_h;
-  out_floor_h = floor_h;
   out_h = p.y;
+  out_ccff = ccff;
 }

@@ -3,9 +3,8 @@
 layout(location = 0) out vec4 frag_colour;
 
 layout(location = 0) in float instance;
-layout(location = 1) in float ceil_h;
-layout(location = 2) in float floor_h;
-layout(location = 3) in float h;
+layout(location = 1) in float h;
+layout(location = 2) in vec4 ccff;
 
 vec4 wall() {
   float r = mod(instance, 4.0) / 4.0;
@@ -23,9 +22,13 @@ vec4 floor_c() {
 }
 
 void main() {
-  if (h > ceil_h) {
+  if (h > ccff.x) {
     frag_colour = ceil_c();
-  } else if (h > floor_h) {
+  } else if (h > ccff.y) {
+    frag_colour = wall();
+  } else if (h > ccff.z) {
+    discard;
+  } else if (h > ccff.w) {
     frag_colour = wall();
   } else {
     frag_colour = floor_c();

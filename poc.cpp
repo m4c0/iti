@@ -11,11 +11,16 @@ struct xz {
   float x;
   float z;
 };
+struct ccff {
+  float c;
+  float wc;
+  float wf;
+  float f;
+};
 struct segment {
   xz xz0;
   xz xz1;
-  float ceil_h;
-  float floor_h;
+  ccff cf;
 };
 class segbuf {
   vee::buffer m_buf;
@@ -36,86 +41,72 @@ public:
     *m++ = {
         .xz0 = {0, 0},
         .xz1 = {5, 0},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {5, 0},
         .xz1 = {10, 0},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {0, 0},
         .xz1 = {0, 10},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {10, 0},
         .xz1 = {10, 10},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {10, 10},
         .xz1 = {5, 10},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {0, 10},
         .xz1 = {5, 10},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {5, 0},
         .xz1 = {5, 3.5},
-        .ceil_h = 1.5,
-        .floor_h = -1.5,
+        .cf = {2.5, 1.5, -1.5, -2.5},
     };
     *m++ = {
         .xz0 = {5, 4},
         .xz1 = {5, 10},
-        .ceil_h = 1.5,
-        .floor_h = -1.5,
+        .cf = {2.5, 1.5, -1.5, -2.5},
     };
     *m++ = {
         .xz0 = {5, 3.5},
         .xz1 = {5.5, 3.5},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {5.5, 3.5},
         .xz1 = {5.5, 4},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {5.5, 4},
         .xz1 = {5, 4},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {5, 4},
         .xz1 = {4.5, 4},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {4.5, 4},
         .xz1 = {4.5, 3.5},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     *m++ = {
         .xz0 = {4.5, 3.5},
         .xz1 = {5, 3.5},
-        .ceil_h = 2.5,
-        .floor_h = -2.5,
+        .cf = {2.5, 0.0, 0.0, -2.5},
     };
     m_size = m - sm;
   }
@@ -158,8 +149,7 @@ void thread::run() {
             quad.vertex_attribute(0),
             vee::vertex_attribute_vec2(1, 0),
             vee::vertex_attribute_vec2(1, sizeof(xz)),
-            vee::vertex_attribute_vec2(1, sizeof(xz) * 2),
-            vee::vertex_attribute_vec2(1, sizeof(xz) * 2 + sizeof(float)),
+            vee::vertex_attribute_vec4(1, sizeof(xz) * 2),
         });
 
     resized() = false;
