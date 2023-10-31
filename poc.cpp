@@ -3,6 +3,7 @@
 #pragma leco add_shader "iti.frag"
 
 import casein;
+import sitime;
 import vee;
 import voo;
 
@@ -122,6 +123,7 @@ struct upc {
   float window_w;
   float window_h;
   float aspect;
+  float time;
 };
 } // namespace
 
@@ -131,6 +133,8 @@ public:
 };
 
 void thread::run() {
+  sitime::stopwatch w{};
+
   voo::device_and_queue dq{"iti", native_ptr()};
   auto cb = vee::allocate_primary_command_buffer(dq.command_pool());
 
@@ -168,6 +172,7 @@ void thread::run() {
           .window_w = static_cast<float>(sw.extent().width),
           .window_h = static_cast<float>(sw.extent().height),
           .aspect = sw.aspect(),
+          .time = w.millis() / 1000.0f,
       };
 
       {

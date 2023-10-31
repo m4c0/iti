@@ -3,6 +3,7 @@
 layout(push_constant) uniform upc {
   vec2 window;
   float aspect;
+  float time;
 } pc;
 
 layout(location = 0) in vec2 position;
@@ -24,7 +25,7 @@ vec4 model() {
 }
 
 vec4 view_model() {
-  const float t = camera_angle;
+  float t = camera_angle + pc.time * 0.25;
   const mat4 view = mat4(
     cos(t), 0, sin(t), 0,
     0, 1, 0, 0,

@@ -3,6 +3,7 @@
 layout(push_constant) uniform upc {
   vec2 window;
   float aspect;
+  float time;
 } pc;
 
 layout(location = 0) out vec4 frag_colour;
@@ -15,7 +16,7 @@ const vec3 camera = vec3(2.0, 0.0, 6.0);
 const float camera_angle = -0.6;
 
 mat3 cam() {
-  const float t = camera_angle;
+  float t = camera_angle + pc.time * 0.25;
   return mat3(
     cos(t), 0, sin(t),
     0, 1, 0,
