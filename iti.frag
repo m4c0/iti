@@ -31,8 +31,19 @@ vec4 wall() {
   return vec4(r, g, b, 1);
 }
 
-vec4 ceil_c() {
-  return vec4(0.5, 0.5, 0.5, 1.0);
+vec4 ceil_c(vec2 p) {
+  mat3 cam = cam();
+  
+  const float fl = 1.5; // focal len
+  vec3 ro = camera;
+  vec3 rd = cam * vec3(p, fl);
+  
+  float t = (ccff.w - ro.y) / rd.y;
+  vec3 pos = ro + t*rd;
+
+  vec2 s = sign(fract(pos.xz * 0.5) - 0.5);
+  float pat = 0.5 - 0.5 * s.x * s.y;
+  return vec4(vec2(pat * 0.3 + 0.2), 0.2, 1.0);
 }
 
 vec4 floor_c(vec2 p) {
