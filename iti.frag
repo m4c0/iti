@@ -14,14 +14,13 @@ layout(location = 2) in vec4 ccff;
 const vec3 camera = vec3(2.0, 0.0, 6.0);
 const float camera_angle = -0.6;
 
-vec3 cam_ray(vec2 p) {
+mat3 cam() {
   const float t = camera_angle;
-  const mat2 mat = mat2(
-    cos(t), sin(t),
-    -sin(t), cos(t)
+  return mat3(
+    cos(t), 0, sin(t),
+    0, 1, 0,
+    -sin(t), 0, cos(t)
   );
-  vec2 v2 = mat * vec2(p.x, 1);
-  return normalize(vec3(v2.x, p.y, v2.y));
 }
 
 vec4 wall() {
@@ -36,12 +35,16 @@ vec4 ceil_c() {
 }
 
 vec4 floor_c(vec2 p) {
-  vec3 vmd = cam_ray(vec2(0, p.y));
-  float t = (2.5 - camera.y) / vmd.y;
+  mat3 cam = cam();
   
-  vec3 rd = cam_ray(p);
-  vec2 xz = camera.xz + rd.xz * t;
-  return vec4(fract(xz) * 0.5 + 0.5, 0.0, 1.0);
+  const float fl = 1.5; // focal len
+  vec3 ro = camera;
+  vec3 rd = cam * vec3(p, fl);
+  
+  float t = (ccff.w - ro.y) / rd.y;
+  vec3 pos = ro + t*rd;
+
+  return vec4(fract(pos.xz) * 0.5 + 0.5, 0.0, 1.0);
 }
 
 void main() {
