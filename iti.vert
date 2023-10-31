@@ -13,15 +13,17 @@ layout(location = 0) out float instance;
 layout(location = 1) out float out_h;
 layout(location = 2) out vec4 out_ccff;
 
+const vec3 camera = vec3(2.0, 0.0, 6.0);
+const float camera_angle = -0.6;
+
 vec4 model() {
-  vec2 d = vec2(0.0);
-  d = mix(xz0, xz1 + d, position);
-  d -= vec2(2.0, 6.0);
+  vec2 d = mix(xz0, xz1, position);
+  d -= camera.xz;
   return vec4(d.x, 0, d.y, 1.0);
 }
 
 vec4 view_model() {
-  const float t = -0.6;
+  const float t = camera_angle;
   const mat4 view = mat4(
     cos(t), 0, sin(t), 0,
     0, 1, 0, 0,
