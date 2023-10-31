@@ -23,6 +23,17 @@ mat3 cam() {
     -sin(t), 0, cos(t)
   );
 }
+vec2 sector_uv(vec2 p) {
+  mat3 cam = cam();
+  
+  const float fl = 1.5; // focal len
+  vec3 ro = camera;
+  vec3 rd = cam * vec3(p, fl);
+  
+  float t = (ccff.w - ro.y) / rd.y;
+  vec3 pos = ro + t*rd;
+  return pos.xz;
+}
 
 vec4 wall() {
   float r = mod(instance, 4.0) / 4.0;
@@ -32,31 +43,15 @@ vec4 wall() {
 }
 
 vec4 ceil_c(vec2 p) {
-  mat3 cam = cam();
-  
-  const float fl = 1.5; // focal len
-  vec3 ro = camera;
-  vec3 rd = cam * vec3(p, fl);
-  
-  float t = (ccff.w - ro.y) / rd.y;
-  vec3 pos = ro + t*rd;
-
-  vec2 s = sign(fract(pos.xz * 0.5) - 0.5);
+  vec2 uv = sector_uv(p);
+  vec2 s = sign(fract(uv * 0.5) - 0.5);
   float pat = 0.5 - 0.5 * s.x * s.y;
   return vec4(vec2(pat * 0.3 + 0.2), 0.2, 1.0);
 }
 
 vec4 floor_c(vec2 p) {
-  mat3 cam = cam();
-  
-  const float fl = 1.5; // focal len
-  vec3 ro = camera;
-  vec3 rd = cam * vec3(p, fl);
-  
-  float t = (ccff.w - ro.y) / rd.y;
-  vec3 pos = ro + t*rd;
-
-  vec2 s = sign(fract(pos.xz * 0.5) - 0.5);
+  vec2 uv = sector_uv(p);
+  vec2 s = sign(fract(uv * 0.5) - 0.5);
   float pat = 0.5 - 0.5 * s.x * s.y;
   return vec4(vec3(pat * 0.3 + 0.2), 1.0);
 }
