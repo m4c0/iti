@@ -45,13 +45,15 @@ vec4 floor_c(vec2 p) {
   float t = (ccff.w - ro.y) / rd.y;
   vec3 pos = ro + t*rd;
 
-  return vec4(fract(pos.xz) * 0.5 + 0.5, 0.0, 1.0);
+  vec2 s = sign(fract(pos.xz * 0.5) - 0.5);
+  float pat = 0.5 - 0.5 * s.x * s.y;
+  return vec4(vec3(pat * 0.3 + 0.2), 1.0);
 }
 
 void main() {
   vec2 p = gl_FragCoord.xy / pc.window * 2.0 - 1.0;
   if (h > ccff.x) {
-    frag_colour = ceil_c();
+    frag_colour = ceil_c(p);
   } else if (h > ccff.y) {
     frag_colour = wall();
   } else if (h > ccff.z) {
