@@ -14,14 +14,14 @@ layout(location = 2) in vec4 ccff;
 const vec3 camera = vec3(2.0, 0.0, 6.0);
 const float camera_angle = -0.6;
 
-vec3 cam_ray(vec2 xy) {
+vec3 cam_ray(vec2 p) {
   const float t = camera_angle;
   const mat2 mat = mat2(
     cos(t), sin(t),
     -sin(t), cos(t)
   );
-  vec3 p = vec3(mat * vec2(xy.x, 1.0), xy.y);
-  return normalize(p.xzy);
+  vec2 v2 = mat * vec2(p.x, 1);
+  return normalize(vec3(v2.x, p.y, v2.y));
 }
 
 vec4 wall() {
@@ -35,38 +35,14 @@ vec4 ceil_c() {
   return vec4(0.5, 0.5, 0.5, 1.0);
 }
 
-mat2 view_model() {
-  const float t = camera_angle;
-  return mat2(
-    cos(t), sin(t),
-    -sin(t), cos(t)
-  );
-}
-
 vec4 floor_c(vec2 p) {
-  mat2 vmm = view_model();
-  
-  vec2 vm = vmm * vec2(0, 1);
-  vec3 vmd = normalize(vec3(vm.x, p.y, vm.y));
+  vec3 vmd = cam_ray(vec2(0, p.y));
   float t = (2.5 - camera.y) / vmd.y;
   
-  vec2 rd0 = vmm * vec2(p.x, 1);
-  vec3 rd = normalize(vec3(rd0.x, p.y, rd0.y));
+  vec3 rd = cam_ray(p);
   vec2 xz = camera.xz + rd.xz * t;
   return vec4(fract(xz) * 0.5 + 0.5, 0.0, 1.0);
 }
-
-/*
-vec4 floor_c(vec2 p) {
-  vec3 vm = cam_ray(vec2(0, 0));
-  float t = (ccff.w - camera.y) / vm.y;
-
-  vec3 rd = cam_ray(p);
-  vec2 xz = camera.xz + rd.xz * t;
-
-  return vec4(fract(xz) * 0.5 + 0.5, 0.2, 1.0);
-}
-*/
 
 void main() {
   vec2 p = gl_FragCoord.xy / pc.window * 2.0 - 1.0;
