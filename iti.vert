@@ -40,7 +40,7 @@ vec4 frustum() {
   const float n = 0.1;
   const float fn = f - n;
 
-  const float fov = 1.0; // tan(45 deg)
+  const float fov = tan(20 * 3.1415 / 180);
 
   const float ymax = n * fov;
   const float xmax = ymax * pc.aspect;
