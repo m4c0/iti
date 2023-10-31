@@ -119,6 +119,8 @@ public:
 };
 
 struct upc {
+  float window_w;
+  float window_h;
   float aspect;
 };
 } // namespace
@@ -139,7 +141,7 @@ void thread::run() {
     voo::swapchain_and_stuff sw{dq};
 
     auto pl = vee::create_pipeline_layout({
-        vee::vertex_push_constant_range<upc>(),
+        vee::vert_frag_push_constant_range<upc>(),
     });
     auto gp = vee::create_graphics_pipeline(
         *pl, sw.render_pass(),
@@ -163,6 +165,8 @@ void thread::run() {
       sw.acquire_next_image();
 
       upc pc = {
+          .window_w = static_cast<float>(sw.extent().width),
+          .window_h = static_cast<float>(sw.extent().height),
           .aspect = sw.aspect(),
       };
 

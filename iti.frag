@@ -1,5 +1,10 @@
 #version 450
 
+layout(push_constant) uniform upc {
+  vec2 window;
+  float aspect;
+} pc;
+
 layout(location = 0) out vec4 frag_colour;
 
 layout(location = 0) in float instance;
