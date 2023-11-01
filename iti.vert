@@ -15,6 +15,7 @@ layout(location = 0) out float instance;
 layout(location = 1) out float out_h;
 layout(location = 2) out vec4 out_ccff;
 
+const float fov = tan(40 * 3.1415 / 180);
 const vec3 camera = vec3(2.0, 0.0, 6.0);
 const float camera_angle = -0.6;
 
@@ -39,8 +40,6 @@ vec4 frustum() {
   const float f = 1000.0;
   const float n = 0.1;
   const float fn = f - n;
-
-  const float fov = tan(40 * 3.1415 / 180);
 
   const float p10 = -(f + n) / fn;
   const float p14 = -2.0 * n * f / fn;

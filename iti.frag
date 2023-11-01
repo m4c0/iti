@@ -12,6 +12,7 @@ layout(location = 0) in float instance;
 layout(location = 1) in float h;
 layout(location = 2) in vec4 ccff;
 
+const float fov = tan(40 * 3.1415 / 180);
 const vec3 camera = vec3(2.0, 0.0, 6.0);
 const float camera_angle = -0.6;
 
@@ -26,7 +27,7 @@ mat3 cam() {
 vec2 sector_uv(vec2 p) {
   mat3 cam = cam();
   
-  const float fl = 1.0 / tan(40 * 3.1415 / 180); // focal len
+  const float fl = 1.0 / fov; // focal len
   vec3 ro = camera;
   vec3 rd = cam * vec3(p, fl);
   
