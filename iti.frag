@@ -57,7 +57,8 @@ vec4 floor_c(vec2 p) {
 }
 
 void main() {
-  vec2 p = gl_FragCoord.xy / pc.window * 2.0 - 1.0;
+  vec2 p = (2.0 * gl_FragCoord.xy - pc.window) / pc.window.y;
+
   if (h > ccff.x) {
     frag_colour = ceil_c(p);
   } else if (h > ccff.y) {
