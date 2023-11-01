@@ -26,7 +26,7 @@ mat3 cam() {
 vec2 sector_uv(vec2 p) {
   mat3 cam = cam();
   
-  const float fl = 1.5; // focal len
+  const float fl = 1.0 / tan(40 * 3.1415 / 180); // focal len
   vec3 ro = camera;
   vec3 rd = cam * vec3(p, fl);
   

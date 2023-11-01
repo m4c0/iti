@@ -40,7 +40,7 @@ vec4 frustum() {
   const float n = 0.1;
   const float fn = f - n;
 
-  const float fov = tan(20 * 3.1415 / 180);
+  const float fov = tan(40 * 3.1415 / 180);
 
   const float p10 = -(f + n) / fn;
   const float p14 = -2.0 * n * f / fn;
