@@ -4,6 +4,7 @@ layout(push_constant) uniform upc {
   vec4 camera;
   vec2 window;
   float aspect;
+  float fov;
   float time;
 } pc;
 
@@ -15,8 +16,6 @@ layout(location = 3) in vec4 ccff;
 layout(location = 0) out float instance;
 layout(location = 1) out float out_h;
 layout(location = 2) out vec4 out_ccff;
-
-const float fov = tan(40 * 3.1415 / 180);
 
 vec4 model() {
   vec2 d = mix(xz0, xz1, position);
@@ -42,11 +41,12 @@ vec4 frustum() {
 
   const float p10 = -(f + n) / fn;
   const float p14 = -2.0 * n * f / fn;
+  const float tan_fov = tan(pc.fov);
 
   vec4 vm = view_model();
   vec4 res;
-  res.x = vm.x / (fov * pc.aspect);
-  res.y = vm.y / fov;
+  res.x = vm.x / (tan_fov * pc.aspect);
+  res.y = vm.y / tan_fov;
   res.z = vm.z * p10 + p14;
   res.w = -vm.z;
   return res;

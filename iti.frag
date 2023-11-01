@@ -4,6 +4,7 @@ layout(push_constant) uniform upc {
   vec4 camera;
   vec2 window;
   float aspect;
+  float fov;
   float time;
 } pc;
 
@@ -12,8 +13,6 @@ layout(location = 0) out vec4 frag_colour;
 layout(location = 0) in float instance;
 layout(location = 1) in float h;
 layout(location = 2) in vec4 ccff;
-
-const float fov = tan(40 * 3.1415 / 180);
 
 mat3 cam() {
   float t = pc.camera.w;
@@ -26,7 +25,7 @@ mat3 cam() {
 vec2 sector_uv(vec2 p) {
   mat3 cam = cam();
   
-  const float fl = 1.0 / fov; // focal len
+  const float fl = 1.0 / tan(pc.fov); // focal len
   vec3 ro = pc.camera.xyz;
   vec3 rd = cam * vec3(p, fl);
   

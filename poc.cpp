@@ -124,6 +124,7 @@ struct upc {
   float window_w;
   float window_h;
   float aspect;
+  float fov;
   float time;
 };
 } // namespace
@@ -174,6 +175,7 @@ void thread::run() {
           .window_w = static_cast<float>(sw.extent().width),
           .window_h = static_cast<float>(sw.extent().height),
           .aspect = sw.aspect(),
+          .fov = 40.0f * 3.141592f / 180.0f,
           .time = w.millis() / 1000.0f,
       };
 
