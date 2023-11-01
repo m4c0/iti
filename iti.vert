@@ -42,15 +42,13 @@ vec4 frustum() {
 
   const float fov = tan(20 * 3.1415 / 180);
 
-  const float p0 = 1 / (fov * pc.aspect);
-  const float p5 = n / fov;
   const float p10 = -(f + n) / fn;
   const float p14 = -2.0 * n * f / fn;
 
   vec4 vm = view_model();
   vec4 res;
   res.x = vm.x / (fov * pc.aspect);
-  res.y = vm.y * n / fov;
+  res.y = vm.y / fov;
   res.z = vm.z * p10 + p14;
   res.w = -vm.z;
   return res;
