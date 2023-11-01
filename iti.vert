@@ -42,20 +42,18 @@ vec4 frustum() {
 
   const float fov = tan(20 * 3.1415 / 180);
 
-  const float ymax = n * fov;
-  const float xmax = ymax * pc.aspect;
-
-  const float p0 = 2.0 * n / (xmax - -xmax);
-  const float p5 = 2.0 * n / (ymax - -ymax);
-  const float p10 = (-f - n) / fn;
+  const float p0 = 1 / (fov * pc.aspect);
+  const float p5 = n / fov;
+  const float p10 = -(f + n) / fn;
   const float p14 = -2.0 * n * f / fn;
-  const mat4 proj = mat4(
-    p0, 0, 0, 0,
-    0, p5, 0, 0,
-    0, 0, p10, -1,
-    0, 0, p14, 0
-  );
-  return proj * view_model();
+
+  vec4 vm = view_model();
+  vec4 res;
+  res.x = vm.x / (fov * pc.aspect);
+  res.y = vm.y * n / fov;
+  res.z = vm.z * p10 + p14;
+  res.w = -vm.z;
+  return res;
 }
 
 void main() {
