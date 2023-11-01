@@ -61,6 +61,6 @@ void main() {
   p.y = mix(-1.0, 1.0, p.y) * p.w;
   gl_Position = p;
 
-  out_h = -p.y;
+  out_h = -p.y + camera.y;
   out_ccff = ccff;
 }
