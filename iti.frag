@@ -1,6 +1,7 @@
 #version 450
 
 layout(push_constant) uniform upc {
+  vec4 camera;
   vec2 window;
   float aspect;
   float time;
@@ -13,11 +14,9 @@ layout(location = 1) in float h;
 layout(location = 2) in vec4 ccff;
 
 const float fov = tan(40 * 3.1415 / 180);
-const vec3 camera = vec3(2.0, 0.0, 6.0);
-const float camera_angle = -0.6;
 
 mat3 cam() {
-  float t = camera_angle + pc.time * 0.25;
+  float t = pc.camera.w;
   return mat3(
     cos(t), 0, sin(t),
     0, 1, 0,
@@ -28,7 +27,7 @@ vec2 sector_uv(vec2 p) {
   mat3 cam = cam();
   
   const float fl = 1.0 / fov; // focal len
-  vec3 ro = camera;
+  vec3 ro = pc.camera.xyz;
   vec3 rd = cam * vec3(p, fl);
   
   float t = (ccff.w - ro.y) / rd.y;

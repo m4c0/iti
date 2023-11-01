@@ -1,6 +1,7 @@
 #version 450
 
 layout(push_constant) uniform upc {
+  vec4 camera;
   vec2 window;
   float aspect;
   float time;
@@ -16,17 +17,15 @@ layout(location = 1) out float out_h;
 layout(location = 2) out vec4 out_ccff;
 
 const float fov = tan(40 * 3.1415 / 180);
-const vec3 camera = vec3(2.0, 0.0, 6.0);
-const float camera_angle = -0.6;
 
 vec4 model() {
   vec2 d = mix(xz0, xz1, position);
-  d -= camera.xz;
+  d -= pc.camera.xz;
   return vec4(d.x, 0, d.y, 1.0);
 }
 
 vec4 view_model() {
-  float t = camera_angle + pc.time * 0.25;
+  float t = pc.camera.w;
   const mat4 view = mat4(
     cos(t), 0, sin(t), 0,
     0, 1, 0, 0,
@@ -61,6 +60,6 @@ void main() {
   p.y = mix(-1.0, 1.0, p.y) * p.w;
   gl_Position = p;
 
-  out_h = -p.y + camera.y;
+  out_h = -p.y + pc.camera.y;
   out_ccff = ccff;
 }

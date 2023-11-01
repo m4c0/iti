@@ -120,6 +120,7 @@ public:
 };
 
 struct upc {
+  float camera[4];
   float window_w;
   float window_h;
   float aspect;
@@ -169,6 +170,7 @@ void thread::run() {
       sw.acquire_next_image();
 
       upc pc = {
+          .camera = {2.0f, 0.0f, 6.0f, -0.6f},
           .window_w = static_cast<float>(sw.extent().width),
           .window_h = static_cast<float>(sw.extent().height),
           .aspect = sw.aspect(),
