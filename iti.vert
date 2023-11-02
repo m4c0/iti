@@ -13,7 +13,7 @@ layout(location = 1) in vec2 xz0;
 layout(location = 2) in vec2 xz1;
 layout(location = 3) in vec4 ccff;
 
-layout(location = 0) out float instance;
+layout(location = 0) out float out_x;
 layout(location = 1) out float out_h;
 layout(location = 2) out vec4 out_ccff;
 
@@ -53,13 +53,14 @@ vec4 frustum() {
 }
 
 void main() {
-  instance = gl_InstanceIndex;
-
   vec4 p = frustum();
   p.y = xz0.y == xz1.y ? position.y : position.x;
   p.y = mix(-1.0, 1.0, p.y) * p.w;
   gl_Position = p;
 
+  float xzd = length(xz1 - xz0);
+  xzd *= xz0.y == xz1.y ? position.x : position.y;
+  out_x = xzd;
   out_h = -p.y + pc.camera.y;
   out_ccff = ccff;
 }

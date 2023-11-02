@@ -10,7 +10,7 @@ layout(push_constant) uniform upc {
 
 layout(location = 0) out vec4 frag_colour;
 
-layout(location = 0) in float instance;
+layout(location = 0) in float out_x;
 layout(location = 1) in float h;
 layout(location = 2) in vec4 ccff;
 
@@ -35,10 +35,10 @@ vec2 sector_uv(vec2 p) {
 }
 
 vec4 wall() {
-  float r = mod(instance, 4.0) / 4.0;
-  float g = mod(floor(instance / 4.0), 2.0) / 2.0;
-  float b = floor(instance / 8.0) / 2.0;
-  return vec4(r, g, b, 1);
+  vec2 uv = vec2(out_x, h);
+  vec2 s = sign(fract(uv * 0.5) - 0.5);
+  float pat = 0.5 - 0.5 * s.x * s.y;
+  return vec4(0.2, vec2(pat * 0.3 + 0.2), 1.0);
 }
 
 vec4 ceil_c(vec2 p) {
