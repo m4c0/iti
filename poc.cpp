@@ -119,8 +119,14 @@ public:
   [[nodiscard]] constexpr auto size() const noexcept { return m_size; }
 };
 
+struct cam {
+  float x;
+  float y;
+  float z;
+  float angle;
+};
 struct upc {
-  float camera[4];
+  cam camera{};
   float window_w;
   float window_h;
   float aspect;
