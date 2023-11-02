@@ -3,6 +3,7 @@
 #pragma leco add_shader "iti.frag"
 
 import casein;
+import missingno;
 import sitime;
 import vee;
 import voo;
@@ -136,7 +137,18 @@ struct upc {
 } // namespace
 
 class thread : public voo::casein_thread {
+  cam m_camera{2.0, 0.0, 6.0, -0.6};
+  mno::opt<float> m_prev_x{};
+
 public:
+  void mouse_move(const casein::events::mouse_move &e) override {
+    constexpr const auto mouse_speed = 1000.0f;
+
+    float x = (*e).x;
+    float px = m_prev_x.unwrap(x);
+    m_camera.angle += (px - x) / mouse_speed;
+    m_prev_x = x;
+  }
   void run() override;
 };
 
@@ -177,7 +189,7 @@ void thread::run() {
       sw.acquire_next_image();
 
       upc pc = {
-          .camera = {2.0f, 0.0f, 6.0f, -0.6f},
+          .camera = m_camera,
           .window_w = static_cast<float>(sw.extent().width),
           .window_h = static_cast<float>(sw.extent().height),
           .aspect = sw.aspect(),
