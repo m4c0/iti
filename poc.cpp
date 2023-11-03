@@ -173,8 +173,13 @@ public:
     walk -= m_keys[casein::K_W] ? speed : 0.0;
     walk += m_keys[casein::K_S] ? speed : 0.0;
 
+    float fly{};
+    fly -= m_keys[casein::K_R] ? speed : 0.0;
+    fly += m_keys[casein::K_F] ? speed : 0.0;
+
     float t = -m_camera.angle;
     m_camera.x += strafe * cos(t) - walk * sin(t);
+    m_camera.y += fly;
     m_camera.z += strafe * sin(t) + walk * cos(t);
   }
 
