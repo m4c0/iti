@@ -1,7 +1,9 @@
 #pragma leco app
 #pragma leco add_shader "iti.vert"
 #pragma leco add_shader "iti.frag"
+#include <math.h>
 
+import hai;
 import casein;
 import curser;
 import missingno;
@@ -139,12 +141,33 @@ struct upc {
 
 class thread : public voo::casein_thread {
   cam m_camera{2.0, 0.0, 6.0, -0.6};
+  hai::array<bool> m_keys{casein::K_MAX};
 
 public:
+  void key_down(const casein::events::key_down &e) override {
+    m_keys[*e] = true;
+  }
+  void key_up(const casein::events::key_up &e) override { m_keys[*e] = false; }
   void mouse_move_rel(const casein::events::mouse_move_rel &e) override {
     constexpr const auto mouse_speed = 1000.0f;
-    m_camera.angle += (*e).x / mouse_speed;
+    m_camera.angle -= (*e).x / mouse_speed;
   }
+  void timer(const casein::events::timer &e) override {
+    constexpr const auto speed = 0.3;
+
+    float strafe{};
+    strafe -= m_keys[casein::K_A] ? speed : 0.0;
+    strafe += m_keys[casein::K_D] ? speed : 0.0;
+
+    float walk{};
+    walk -= m_keys[casein::K_W] ? speed : 0.0;
+    walk += m_keys[casein::K_S] ? speed : 0.0;
+
+    float t = -m_camera.angle;
+    m_camera.x += strafe * cos(t) - walk * sin(t);
+    m_camera.z += strafe * sin(t) + walk * cos(t);
+  }
+
   void run() override;
 };
 
