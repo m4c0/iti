@@ -30,7 +30,9 @@ vec2 sector_uv(vec2 p, float plane) {
   ro.x *= -1;
   vec3 rd = cam * vec3(p, fl);
   
-  float t = (plane - ro.y) / rd.y;
+  // 0.4 -> 2.5
+  // 0.24 -> 1.5
+  float t = 0.84 * (plane - ro.y) / rd.y;
   vec3 pos = ro + t*rd;
   return pos.xz;
 }
