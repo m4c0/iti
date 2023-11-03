@@ -25,14 +25,12 @@ mat3 cam() {
 vec2 sector_uv(vec2 p, float plane) {
   mat3 cam = cam();
   
-  const float fl = 1.0 / tan(pc.fov); // focal len
+  const float fl = tan(pc.fov); // focal len
   vec3 ro = pc.camera.xyz;
   ro.x *= -1;
-  vec3 rd = cam * vec3(p, fl);
+  vec3 rd = cam * vec3(p, 1.0 / fl);
   
-  // 0.4 -> 2.5
-  // 0.24 -> 1.5
-  float t = 0.84 * (plane - ro.y) / rd.y;
+  float t = fl * (plane - ro.y) / rd.y;
   vec3 pos = ro + t*rd;
   return pos.xz;
 }
