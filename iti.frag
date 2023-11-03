@@ -39,7 +39,7 @@ vec4 wall() {
   vec2 uv = vec2(out_x, h);
   vec2 s = sign(fract(uv * 0.5) - 0.5);
   float pat = 0.5 - 0.5 * s.x * s.y;
-  return vec4(0.2, vec2(pat * 0.3 + 0.2), 1.0);
+  return vec4(0.0, vec2(pat * 0.3 + 0.2), 1.0);
 }
 
 vec4 ceil_c(vec2 p) {
