@@ -3,6 +3,7 @@
 #pragma leco add_shader "iti.frag"
 
 import casein;
+import curser;
 import missingno;
 import sitime;
 import vee;
@@ -149,6 +150,7 @@ public:
 
 void thread::run() {
   sitime::stopwatch w{};
+  auto cur = curser::hide();
 
   voo::device_and_queue dq{"iti", native_ptr()};
   auto cb = vee::allocate_primary_command_buffer(dq.command_pool());
