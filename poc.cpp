@@ -187,22 +187,25 @@ void thread::run() {
     auto pl = vee::create_pipeline_layout({
         vee::vert_frag_push_constant_range<upc>(),
     });
-    auto gp = vee::create_graphics_pipeline(
-        *pl, sw.render_pass(),
-        {
+    auto gp = vee::create_graphics_pipeline({
+        .pipeline_layout = *pl,
+        .render_pass = sw.render_pass(),
+        .back_face_cull = false,
+        .shaders{
             voo::shader("iti.vert.spv").pipeline_vert_stage(),
             voo::shader("iti.frag.spv").pipeline_frag_stage(),
         },
-        {
+        .bindings{
             quad.vertex_input_bind(),
             vee::vertex_input_bind_per_instance(sizeof(segment)),
         },
-        {
+        .attributes{
             quad.vertex_attribute(0),
             vee::vertex_attribute_vec2(1, 0),
             vee::vertex_attribute_vec2(1, sizeof(xz)),
             vee::vertex_attribute_vec4(1, sizeof(xz) * 2),
-        });
+        },
+    });
 
     resized() = false;
     while (!interrupted() && !resized()) {
