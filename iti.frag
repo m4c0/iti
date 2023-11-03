@@ -27,9 +27,10 @@ vec2 sector_uv(vec2 p) {
   
   const float fl = 1.0 / tan(pc.fov); // focal len
   vec3 ro = pc.camera.xyz;
+  ro.x *= -1;
   vec3 rd = cam * vec3(p, fl);
   
-  float t = (ccff.w - ro.y) / rd.y;
+  float t = (ccff.w - ro.y) / abs(rd.y);
   vec3 pos = ro + t*rd;
   return pos.xz;
 }
