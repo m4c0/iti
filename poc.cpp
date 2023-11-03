@@ -138,16 +138,11 @@ struct upc {
 
 class thread : public voo::casein_thread {
   cam m_camera{2.0, 0.0, 6.0, -0.6};
-  mno::opt<float> m_prev_x{};
 
 public:
-  void mouse_move(const casein::events::mouse_move &e) override {
+  void mouse_move_rel(const casein::events::mouse_move_rel &e) override {
     constexpr const auto mouse_speed = 1000.0f;
-
-    float x = (*e).x;
-    float px = m_prev_x.unwrap(x);
-    m_camera.angle += (px - x) / mouse_speed;
-    m_prev_x = x;
+    m_camera.angle += (*e).x / mouse_speed;
   }
   void run() override;
 };
